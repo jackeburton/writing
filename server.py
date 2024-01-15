@@ -1,5 +1,5 @@
 from flask import Flask, request, render_template
-import threading
+import threading, datetime
 
 LENGTH_LIMIT = 10_000
 TIME_LIMIT = 5
@@ -28,6 +28,10 @@ def handler(input):
     # start a timer, if after TIME_LIMIT seconds this code is not called again do another fucntion
     timer = threading.Timer(TIME_LIMIT, lambda: on_timeout(input_text))
     timer.start()
+    file_name = str(datetime.datetime.now())
+    file = open(file_name + '.txt', 'x')
+    file.write(input_text)
+    file.close()
     return render_template('text_box.html')
 
 def on_timeout(post_text):
